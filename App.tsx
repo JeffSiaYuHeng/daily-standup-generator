@@ -3,6 +3,7 @@ import { StandupInput } from './components/StandupInput';
 import { StandupOutput } from './components/StandupOutput';
 import { HistorySidebar } from './components/HistorySidebar';
 import { JiraTicketManager } from './components/JiraTicketManager';
+import { InstallPrompt } from './components/InstallPrompt';
 import { 
   getHistory, saveEntry, deleteEntry, getLatestEntry, updateEntry, syncLocalToCloud,
   getTickets, saveTicket, deleteTicket
@@ -413,6 +414,8 @@ function App() {
         onSync={handleSync}
         isSyncing={isSyncing}
       />
+      
+      <InstallPrompt />
     </div>
   );
 }

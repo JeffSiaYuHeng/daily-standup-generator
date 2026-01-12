@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { ToastProvider } from './context/ToastContext';
+import { registerServiceWorker, checkForPWAInstall } from './pwa-register';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -16,3 +17,7 @@ root.render(
     </ToastProvider>
   </React.StrictMode>
 );
+
+// Register PWA service worker
+registerServiceWorker();
+checkForPWAInstall();
