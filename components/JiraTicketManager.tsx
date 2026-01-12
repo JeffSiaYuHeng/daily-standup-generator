@@ -9,7 +9,7 @@ interface JiraTicketManagerProps {
   onDeleteTicket: (id: string) => Promise<void>;
 }
 
-const STATUS_OPTIONS: TicketStatus[] = ['In Progress', 'In Review', 'Done', 'Cancel'];
+const STATUS_OPTIONS: TicketStatus[] = ['To Do', 'In Progress', 'In Review', 'Done', 'Cancel'];
 
 export const JiraTicketManager: React.FC<JiraTicketManagerProps> = ({
   tickets,
@@ -26,7 +26,7 @@ export const JiraTicketManager: React.FC<JiraTicketManagerProps> = ({
     } else {
       setEditingTicket({
         id: uuidv4(),
-        status: 'In Progress',
+        status: 'To Do',
         ticketKey: '',
         title: '',
         link: ''
@@ -58,6 +58,7 @@ export const JiraTicketManager: React.FC<JiraTicketManagerProps> = ({
 
   const getStatusColor = (status: TicketStatus) => {
     switch (status) {
+      case 'To Do': return 'text-slate-500';
       case 'In Progress': return 'text-blue-500';
       case 'In Review': return 'text-amber-500';
       case 'Done': return 'text-emerald-500';

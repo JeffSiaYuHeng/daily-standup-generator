@@ -32,7 +32,7 @@ export interface IWindow extends Window {
 }
 
 // Jira / Ticket Types
-export type TicketStatus = 'In Progress' | 'In Review' | 'Done' | 'Cancel';
+export type TicketStatus = 'To Do' | 'In Progress' | 'In Review' | 'Done' | 'Cancel';
 
 export interface JiraTicket {
   id: string;
