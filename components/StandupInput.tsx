@@ -85,9 +85,11 @@ export const StandupInput: React.FC<StandupInputProps> = ({
         }
 
         if (finalTranscript) {
+           // Clean the transcript by removing extra whitespace and newlines
+           const cleanTranscript = finalTranscript.replace(/\s+/g, ' ').trim();
            // Append to the latest value from ref
            const separator = valueRef.current && !valueRef.current.endsWith('\n') && !valueRef.current.endsWith(' ') ? ' ' : '';
-           const newValue = valueRef.current + separator + finalTranscript;
+           const newValue = valueRef.current + separator + cleanTranscript;
            onChange(newValue);
            // valueRef update happens in the other useEffect
         }

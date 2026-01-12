@@ -55,7 +55,7 @@ export const generateStandup = async (request: GenerationRequest): Promise<Gener
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
