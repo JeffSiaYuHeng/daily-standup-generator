@@ -1,0 +1,7 @@
+{
+  "name": "Daily Standup Generator",
+  "description": "Convert raw notes and voice into professional daily standup updates using Gemini AI.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
