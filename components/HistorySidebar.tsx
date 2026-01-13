@@ -293,9 +293,50 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
               </div>
             ) : view === 'settings' ? (
               <form onSubmit={handleSettingsSave} className="p-6 space-y-5 animate-in slide-in-from-right-4">
-                <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl text-sm text-indigo-900 dark:text-indigo-200 mb-6">
-                   <p className="font-bold mb-2">Sync your history</p>
-                   <p className="opacity-80 leading-relaxed text-xs">Enter your Supabase project credentials to enable cloud synchronization. This will allow you to access your standup history across devices.</p>
+                <div className="p-3 sm:p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl text-indigo-900 dark:text-indigo-200 mb-6">
+                   <p className="font-bold mb-2 text-sm sm:text-base">Sync your history</p>
+                   <p className="opacity-80 leading-relaxed text-xs mb-3">Enter your Supabase project credentials to enable cloud synchronization. This will allow you to access your standup history across devices.</p>
+                   <p className="opacity-70 leading-relaxed text-xs border-t border-indigo-200 dark:border-indigo-800 pt-3 mt-3">
+                     <strong>Setup required:</strong> Before connecting, run this SQL in your Supabase SQL Editor (Database → SQL Editor):
+                   </p>
+                   <div className="mt-3 p-2 sm:p-3 bg-white dark:bg-slate-900 rounded-lg text-[9px] sm:text-[10px] font-mono text-slate-700 dark:text-slate-300 overflow-x-auto max-h-48 sm:max-h-64 overflow-y-auto border border-indigo-100 dark:border-slate-800 whitespace-pre-wrap break-words">
+                     <pre className="text-[9px] sm:text-[10px] leading-tight sm:leading-relaxed">-- Create standups table
+CREATE TABLE IF NOT EXISTS public.standups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  date TIMESTAMP WITH TIME ZONE NOT NULL,
+  raw_input TEXT NOT NULL,
+  generated_output TEXT NOT NULL,
+  consistency_notes JSONB DEFAULT '[]'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create jira_tickets table
+CREATE TABLE IF NOT EXISTS public.jira_tickets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  ticket_key TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  status TEXT NOT NULL,
+  link TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Add indexes
+CREATE INDEX IF NOT EXISTS idx_standups_date
+ON public.standups(date DESC);
+CREATE INDEX IF NOT EXISTS idx_tickets_key
+ON public.jira_tickets(ticket_key);
+
+-- Enable RLS
+ALTER TABLE public.standups ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.jira_tickets ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Enable all access" 
+ON public.standups FOR ALL USING (true);
+
+CREATE POLICY "Enable all access" 
+ON public.jira_tickets FOR ALL USING (true);</pre>
+                   </div>
                 </div>
                 
                 <div className="space-y-1.5">
