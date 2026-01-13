@@ -302,11 +302,9 @@ function App() {
               className="flex items-center gap-2.5 shrink-0 cursor-pointer group" 
               onClick={() => setView('generator')}
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-[14px] flex items-center justify-center text-white font-bold text-xl shadow-xl shadow-indigo-500/20 transform transition-all group-hover:scale-105 active:scale-95 duration-300">
-                S
-              </div>
+              <img src="/icons/Logo.png" className="shadow-lg shadow-indigo-500/20 transform transition-all rounded-[14px] w-10 h-10 sm:w-12 sm:h-12 group-hover:scale-105 active:scale-95 duration-300" alt="Standup AI Logo" />
               <div className="hidden lg:block">
-                <h1 className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">Standup AI</h1>
+                <h1 className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">Daily Standup AI</h1>
                 <p className="text-[9px] uppercase font-black text-indigo-500 dark:text-indigo-400 mt-1 tracking-[0.2em]">Engineering Hub</p>
               </div>
             </div>
