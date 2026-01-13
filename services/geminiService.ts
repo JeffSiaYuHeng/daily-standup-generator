@@ -1,6 +1,19 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { GenerationRequest, GenerationResult } from '../types';
 
+const GEMINI_API_KEY_STORAGE = 'GEMINI_API_KEY';
+
+const getApiKey = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const key = localStorage.getItem(GEMINI_API_KEY_STORAGE);
+    return key ? key.trim() : null;
+  } catch (e) {
+    console.warn("Failed to retrieve API key from localStorage");
+    return null;
+  }
+};
+
 const SYSTEM_INSTRUCTION = `
 You are a professional software engineer assistant designed to format daily standups.
 Your goal is to take raw, messy notes or voice transcripts and convert them into a clean, professional standup.
@@ -36,8 +49,10 @@ Return the result in the same JSON format as before.
 `;
 
 export const generateStandup = async (request: GenerationRequest): Promise<GenerationResult> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("API Key is missing.");
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error("Gemini API key is not configured. Please add your API key in settings.");
+  }
   const ai = new GoogleGenAI({ apiKey });
 
   try {
@@ -84,8 +99,10 @@ export const generateStandup = async (request: GenerationRequest): Promise<Gener
 };
 
 export const refineStandup = async (currentText: string, instruction: string): Promise<GenerationResult> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("API Key is missing.");
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error("Gemini API key is not configured. Please add your API key in settings.");
+  }
   const ai = new GoogleGenAI({ apiKey });
 
   try {

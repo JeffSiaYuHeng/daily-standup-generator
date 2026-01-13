@@ -4,9 +4,10 @@ import { StandupOutput } from './components/StandupOutput';
 import { HistorySidebar } from './components/HistorySidebar';
 import { JiraTicketManager } from './components/JiraTicketManager';
 import { InstallPrompt } from './components/InstallPrompt';
+import { ApiKeySettings } from './components/ApiKeySettings';
 import { 
   getHistory, saveEntry, deleteEntry, getLatestEntry, updateEntry, syncLocalToCloud,
-  getTickets, saveTicket, deleteTicket
+  getTickets, saveTicket, deleteTicket, getGeminiApiKey
 } from './services/storageService';
 import { generateStandup, refineStandup } from './services/geminiService';
 import { StandupEntry, GenerationStatus, GenerationResult, JiraTicket } from './types';
@@ -33,6 +34,7 @@ function App() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isRefining, setIsRefining] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [showApiKeySettings, setShowApiKeySettings] = useState(false);
   
   const toast = useToast();
 
@@ -46,6 +48,17 @@ function App() {
   });
 
   const [activeTab, setActiveTab] = useState<'input' | 'output'>('input');
+
+  // Check for API key on mount
+  useEffect(() => {
+    if (!getGeminiApiKey()) {
+      const timer = setTimeout(() => {
+        toast.info("Please configure your Gemini API key to get started.");
+        setShowApiKeySettings(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -111,6 +124,13 @@ function App() {
       return;
     }
 
+    // Check if API key is configured
+    if (!getGeminiApiKey()) {
+      toast.error("Please configure your Gemini API key in settings.");
+      setShowApiKeySettings(true);
+      return;
+    }
+
     setStatus(GenerationStatus.GENERATING);
     setErrorMsg(null);
     setGeneratedOutput('');
@@ -144,6 +164,12 @@ function App() {
   };
 
   const handleRefine = async (instruction: string) => {
+    if (!getGeminiApiKey()) {
+      toast.error("Please configure your Gemini API key in settings.");
+      setShowApiKeySettings(true);
+      return;
+    }
+    
     setIsRefining(true);
     try {
       const result = await refineStandup(generatedOutput, instruction);
@@ -306,6 +332,16 @@ function App() {
 
           <div className="flex items-center gap-1 sm:gap-3 shrink-0">
             <button
+              onClick={() => setShowApiKeySettings(true)}
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all duration-300 focus:outline-none relative"
+              title="API Settings"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243M8.879 8.879L4.636 4.636m10.485 14.728l-4.243-4.243m-6.364 0l-4.243 4.243"></path></svg>
+              {!getGeminiApiKey() && (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+              )}
+            </button>
+            <button
               onClick={() => setDarkMode(!darkMode)}
               className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all duration-300 focus:outline-none"
             >
@@ -414,6 +450,13 @@ function App() {
         onSync={handleSync}
         isSyncing={isSyncing}
       />
+      
+      {showApiKeySettings && (
+        <ApiKeySettings
+          onClose={() => setShowApiKeySettings(false)}
+          onSave={() => toast.success("API key saved successfully")}
+        />
+      )}
       
       <InstallPrompt />
     </div>

@@ -28,7 +28,7 @@ This tool is designed for engineers who want to maintain a consistent project na
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- A Google Gemini API Key ([aistudio.google.com](https://aistudio.google.com/))
+- A Google Gemini API Key ([aistudio.google.com](https://aistudio.google.com/app/apikey))
 - (Optional) A Supabase Project for cloud sync
 
 ### Quick Start
@@ -40,10 +40,18 @@ This tool is designed for engineers who want to maintain a consistent project na
    npm install
    ```
 
-2. **Environment Configuration**
-   The application requires a `process.env.API_KEY` for the Gemini API. In this environment, it is managed automatically.
+2. **Start the Application**
+   ```bash
+   npm run dev
+   ```
 
-3. **Supabase Setup (Optional)**
+3. **Configure API Key**
+   - On first launch, you'll be prompted to enter your Gemini API key
+   - Click the settings icon (⚙️) in the header to add or update your API key
+   - Your API key is stored securely in your browser's localStorage
+   - The key is never logged or sent anywhere except Google's Gemini API
+
+4. **Supabase Setup (Optional)**
    Update `supabaseConfig.ts` with your project URL and `anon` public key to enable cloud history.
 
 ## 📖 Usage Guide

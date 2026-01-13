@@ -6,10 +6,37 @@ const TABLE_NAME = 'standups';
 const TICKETS_TABLE = 'jira_tickets';
 const LOCAL_STORAGE_KEY = 'standup_history_local_v1';
 const TICKETS_STORAGE_KEY = 'jira_tickets_local_v1';
+const GEMINI_API_KEY_STORAGE = 'GEMINI_API_KEY';
 
 // Robust check to avoid calling API with known bad credentials
 export const isClientReady = () => {
   return isSupabaseConfigured();
+};
+
+// --- Gemini API Key Helpers ---
+export const getGeminiApiKey = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const key = localStorage.getItem(GEMINI_API_KEY_STORAGE);
+    return key ? key.trim() : null;
+  } catch (e) {
+    console.warn("Failed to retrieve Gemini API key from localStorage");
+    return null;
+  }
+};
+
+export const saveGeminiApiKey = (apiKey: string): void => {
+  if (typeof window === 'undefined') return;
+  const trimmed = apiKey.trim();
+  if (!trimmed) {
+    throw new Error("API key cannot be empty");
+  }
+  localStorage.setItem(GEMINI_API_KEY_STORAGE, trimmed);
+};
+
+export const removeGeminiApiKey = (): void => {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(GEMINI_API_KEY_STORAGE);
 };
 
 // --- Mappers for Standups ---
