@@ -14,6 +14,12 @@ export const InstallPrompt: React.FC = () => {
       return;
     }
 
+    // Check if user previously dismissed the prompt
+    const dismissed = localStorage.getItem('pwa-install-dismissed');
+    if (dismissed === 'true') {
+      return;
+    }
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -47,6 +53,7 @@ export const InstallPrompt: React.FC = () => {
   };
 
   const handleDismiss = () => {
+    localStorage.setItem('pwa-install-dismissed', 'true');
     setShowPrompt(false);
   };
 
