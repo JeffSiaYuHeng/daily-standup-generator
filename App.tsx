@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Cog6ToothIcon, SunIcon, MoonIcon, ClockIcon, BarChart3Icon, DocumentIcon, XMarkIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { StandupInput } from './components/StandupInput';
 import { StandupOutput } from './components/StandupOutput';
 import { HistorySidebar } from './components/HistorySidebar';
@@ -296,69 +297,70 @@ function App() {
       </div>
 
       <header className="flex-none z-30 transition-all duration-300 backdrop-blur-xl bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/50 dark:border-slate-800/50">
-        <div className="max-w-[1920px] mx-auto px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-6">
+        <div className="max-w-[1920px] mx-auto px-3 sm:px-8 py-2 sm:py-3 flex flex-col gap-2">
+          {/* Top Row: Logo and Right Actions */}
+          <div className="flex items-center justify-between gap-2 h-10 sm:h-auto">
             <div 
-              className="flex items-center gap-2.5 shrink-0 cursor-pointer group" 
+              className="flex items-center gap-2 shrink-0 cursor-pointer group" 
               onClick={() => setView('generator')}
             >
-              <img src="/icons/Logo.png" className="shadow-lg shadow-indigo-500/20 transform transition-all rounded-[14px] w-10 h-10 sm:w-12 sm:h-12 group-hover:scale-105 active:scale-95 duration-300" alt="Standup AI Logo" />
+              <img src="/icons/Logo.png" className="shadow-lg shadow-indigo-500/20 transform transition-all rounded-[14px] w-9 h-9 sm:w-12 sm:h-12 group-hover:scale-105 active:scale-95 duration-300" alt="Standup AI Logo" />
               <div className="hidden lg:block">
                 <h1 className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">Daily Standup AI</h1>
                 <p className="text-[9px] uppercase font-black text-indigo-500 dark:text-indigo-400 mt-1 tracking-[0.2em]">Engineering Hub</p>
               </div>
             </div>
 
-            {/* Main Navigation - Bigger for Mobile */}
-            <nav className="flex items-center p-1.5 sm:p-2 bg-slate-200/50 dark:bg-slate-800/50 rounded-[20px] border border-white/20 dark:border-slate-700/50 shadow-inner">
-              <button 
-                onClick={() => setView('generator')}
-                className={`flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-3 rounded-[16px] text-[12px] sm:text-sm font-black uppercase tracking-widest transition-all duration-300 ${view === 'generator' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-lg transform scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+              <button
+                onClick={() => setShowApiKeySettings(true)}
+                className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all duration-300 focus:outline-none relative"
+                title="API Settings"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
-                <span className="xs:inline">Standup</span>
+                <Cog6ToothIcon className="w-[18px] h-[18px]" />
+                {!getGeminiApiKey() && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+                )}
+              </button>
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all duration-300 focus:outline-none"
+              >
+                {darkMode ? (
+                  <SunIcon className="w-[18px] h-[18px]" />
+                ) : (
+                  <MoonIcon className="w-[18px] h-[18px]" />
+                )}
               </button>
               <button 
-                onClick={() => setView('tickets')}
-                className={`flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-3 rounded-[16px] text-[12px] sm:text-sm font-black uppercase tracking-widest transition-all duration-300 ${view === 'tickets' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-lg transform scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                onClick={() => setIsSidebarOpen(true)}
+                className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all relative"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
-                <span className="xs:inline">Jira</span>
+                <ClockIcon className="w-[18px] h-[18px]" />
+                {history.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
+                )}
               </button>
-            </nav>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
-            <button
-              onClick={() => setShowApiKeySettings(true)}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all duration-300 focus:outline-none relative"
-              title="API Settings"
+          {/* Bottom Row: Navigation Tabs */}
+          <nav className="flex items-center p-1.5 bg-slate-200/50 dark:bg-slate-800/50 rounded-[18px] border border-white/20 dark:border-slate-700/50 shadow-inner">
+            <button 
+              onClick={() => setView('generator')}
+              className={`flex items-center justify-center gap-1.5 flex-1 px-3 sm:px-6 py-2.5 rounded-[14px] text-[11px] sm:text-sm font-black uppercase tracking-widest transition-all duration-300 ${view === 'generator' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-lg' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243M8.879 8.879L4.636 4.636m10.485 14.728l-4.243-4.243m-6.364 0l-4.243 4.243"></path></svg>
-              {!getGeminiApiKey() && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
-              )}
-            </button>
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all duration-300 focus:outline-none"
-            >
-              {darkMode ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-              )}
+              <BarChart3Icon className="w-[14px] h-[14px]" />
+              <span className="hidden xs:inline">Standup</span>
             </button>
             <button 
-              onClick={() => setIsSidebarOpen(true)}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full transition-all relative"
+              onClick={() => setView('tickets')}
+              className={`flex items-center justify-center gap-1.5 flex-1 px-3 sm:px-6 py-2.5 rounded-[14px] text-[11px] sm:text-sm font-black uppercase tracking-widest transition-all duration-300 ${view === 'tickets' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-lg' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              {history.length > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
-              )}
+              <DocumentIcon className="w-[14px] h-[14px]" />
+              <span className="hidden xs:inline">Jira</span>
             </button>
-          </div>
+          </nav>
         </div>
       </header>
 
@@ -366,11 +368,11 @@ function App() {
         {errorMsg && (
           <div className="mb-4 p-4 bg-red-50/80 dark:bg-red-900/20 border border-red-200/50 dark:border-red-800/50 text-red-700 dark:text-red-300 rounded-2xl flex items-center gap-4 flex-none animate-in fade-in shadow-sm">
              <div className="p-2 bg-white dark:bg-red-900/40 rounded-xl shadow-sm">
-               <svg className="w-5 h-5 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+               <ExclamationCircleIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
              </div>
              <p className="font-bold text-sm flex-1">{errorMsg}</p>
              <button onClick={() => setErrorMsg(null)} className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-lg transition-colors">
-               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+               <XMarkIcon className="w-[18px] h-[18px]" />
              </button>
           </div>
         )}

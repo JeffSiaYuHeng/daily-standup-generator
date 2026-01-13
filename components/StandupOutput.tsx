@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { DocumentDuplicateIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { Button } from './ui/Button';
 import { useToast } from '../context/ToastContext';
 import { Skeleton } from './ui/Skeleton';
@@ -116,7 +117,7 @@ export const StandupOutput: React.FC<StandupOutputProps> = ({
                       className={`w-12 h-12 flex items-center justify-center bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-[20px] shadow-2xl border border-white/20 dark:border-slate-700/50 transition-all active:scale-90 ${copied ? 'text-emerald-500' : 'text-slate-500 dark:text-slate-300 hover:text-indigo-600'}`}
                       title="Copy to clipboard"
                     >
-                       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                       <DocumentDuplicateIcon className="w-[22px] h-[22px]" />
                     </button>
                     <button 
                       onClick={onSave}
@@ -133,7 +134,7 @@ export const StandupOutput: React.FC<StandupOutputProps> = ({
                      <div className="p-6 rounded-[28px] bg-amber-500/10 border border-amber-500/20 backdrop-blur-sm animate-in slide-in-from-top-4 duration-500">
                         <div className="flex items-start gap-4">
                           <div className="p-2 bg-amber-500 text-white rounded-xl shadow-lg">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
+                            <SparklesIcon className="w-5 h-5" />
                           </div>
                           <div className="space-y-2">
                              <p className="text-[11px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em]">Consistency Check</p>

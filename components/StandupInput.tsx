@@ -1,4 +1,5 @@
 import React from 'react';
+import { PencilIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { JiraTicket } from '../types';
 import { Button } from './ui/Button';
 
@@ -46,7 +47,7 @@ export const StandupInput: React.FC<StandupInputProps> = ({
       <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md flex justify-between items-center z-10 shrink-0">
         <h2 className="font-black text-slate-800 dark:text-slate-100 flex items-center gap-3 uppercase tracking-tighter text-sm">
           <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl text-indigo-600 dark:text-indigo-400">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            <PencilIcon className="w-[18px] h-[18px]" />
           </div>
           Drafting Area
         </h2>
@@ -56,7 +57,7 @@ export const StandupInput: React.FC<StandupInputProps> = ({
               onClick={onPromote}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-500/20 transition-all border border-indigo-500/20 active:scale-95"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path></svg>
+              <ArrowPathIcon className="w-[14px] h-[14px]" />
               Roll
             </button>
           )}

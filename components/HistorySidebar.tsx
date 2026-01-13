@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ArrowLeftIcon, Cog6ToothIcon, PlusIcon, ArrowPathIcon, TrashIcon, XMarkIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { StandupEntry } from '../types';
 import { isSupabaseConfigured } from '../services/supabaseClient';
@@ -127,7 +128,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                   onClick={handleBack}
                   className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors text-slate-500"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                  <ArrowLeftIcon className="w-5 h-5" />
                 </button>
               )}
               <div>
@@ -155,12 +156,12 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                       Connect DB
                     </button>
                   ) : (
-                    <button
+                    <button 
                       onClick={() => setView('settings')}
                       className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
                       title="Settings"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                      <Cog6ToothIcon className="w-[18px] h-[18px]" />
                     </button>
                   )}
                   
@@ -169,7 +170,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                     className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 rounded-xl transition-all border border-indigo-100 dark:border-indigo-900/30"
                     title="Add past standup manually"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <PlusIcon className="w-[18px] h-[18px]" />
                   </button>
                   
                   {isConfigured && (
@@ -179,7 +180,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                       className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 rounded-xl transition-all border border-transparent disabled:opacity-50"
                       title="Sync with Cloud"
                     >
-                       <svg className={`${isSyncing ? 'animate-spin' : ''}`} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path></svg>
+                       <ArrowPathIcon className={`w-[18px] h-[18px] ${isSyncing ? 'animate-spin' : ''}`} />
                     </button>
                   )}
                 </>
@@ -189,7 +190,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                 className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 rounded-xl transition-all border border-transparent"
                 title="Close Sidebar"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <XMarkIcon className="w-[18px] h-[18px]" />
               </button>
             </div>
           </div>
@@ -206,7 +207,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                 ) : history.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-slate-400 text-center p-6">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-300"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      <ClockIcon className="w-6 h-6 text-slate-300" />
                     </div>
                     <p className="font-medium text-slate-600 dark:text-slate-400">Your history is empty</p>
                     <button onClick={() => setView('add')} className="text-xs font-bold text-indigo-500 mt-2 hover:underline">Add manually</button>
@@ -235,14 +236,14 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                             className="p-1.5 bg-slate-50 dark:bg-slate-900 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
                             title="Restore into Editor"
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path></svg>
+                            <ArrowPathIcon className="w-3 h-3" />
                           </button>
                           <button 
                             onClick={(e) => { e.stopPropagation(); onDelete(entry.id); }}
                             className="text-slate-300 hover:text-red-500 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             title="Delete"
                           >
-                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                             <TrashIcon className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
