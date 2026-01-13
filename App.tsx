@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Cog6ToothIcon, SunIcon, MoonIcon, ClockIcon, BarChart3Icon, DocumentIcon, XMarkIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, SunIcon, MoonIcon, ClockIcon, ChartBarIcon, DocumentIcon, XMarkIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { StandupInput } from './components/StandupInput';
 import { StandupOutput } from './components/StandupOutput';
 import { HistorySidebar } from './components/HistorySidebar';
@@ -350,7 +350,7 @@ function App() {
               onClick={() => setView('generator')}
               className={`flex items-center justify-center gap-1.5 flex-1 px-3 sm:px-6 py-2.5 rounded-[14px] text-[11px] sm:text-sm font-black uppercase tracking-widest transition-all duration-300 ${view === 'generator' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-lg' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
             >
-              <BarChart3Icon className="w-[14px] h-[14px]" />
+              <ChartBarIcon className="w-[14px] h-[14px]" />
               <span className="hidden xs:inline">Standup</span>
             </button>
             <button 

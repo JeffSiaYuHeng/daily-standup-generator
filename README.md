@@ -52,7 +52,11 @@ This tool is designed for engineers who want to maintain a consistent project na
    - The key is never logged or sent anywhere except Google's Gemini API
 
 4. **Supabase Setup (Optional)**
-   Update `supabaseConfig.ts` with your project URL and `anon` public key to enable cloud history.
+   - To enable cloud sync across devices, you'll need a Supabase project
+   - Get your project URL and `anon` public key from [app.supabase.com](https://app.supabase.com)
+   - Enter these credentials in the app's settings (⚙️ icon)
+   - Your Supabase credentials are stored locally in your browser's localStorage
+   - The app will automatically switch from local-only to cloud-synced mode once configured
 
 ## 📖 Usage Guide
 
