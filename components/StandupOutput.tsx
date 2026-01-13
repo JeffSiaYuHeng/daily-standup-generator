@@ -33,12 +33,36 @@ export const StandupOutput: React.FC<StandupOutputProps> = ({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(value);
+      // Convert markdown bold to HTML for rich text support
+      const htmlContent = value
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+      
+      // Create rich text blob
+      const htmlBlob = new Blob([`<html><body>${htmlContent}</body></html>`], { type: 'text/html' });
+      const textBlob = new Blob([value], { type: 'text/plain' });
+      
+      // Copy both formats to clipboard for maximum compatibility
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/html': htmlBlob,
+          'text/plain': textBlob
+        })
+      ]);
+      
       setCopied(true);
       toast.success("Standup copied!");
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      toast.error("Copy failed");
+      // Fallback to simple text copy if rich text fails
+      try {
+        await navigator.clipboard.writeText(value);
+        setCopied(true);
+        toast.success("Standup copied!");
+        setTimeout(() => setCopied(false), 2000);
+      } catch (fallbackErr) {
+        toast.error("Copy failed");
+      }
     }
   };
 

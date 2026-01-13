@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { IWindow, JiraTicket } from '../types';
+import React from 'react';
+import { JiraTicket } from '../types';
 import { Button } from './ui/Button';
 
 interface StandupInputProps {
@@ -31,97 +31,6 @@ export const StandupInput: React.FC<StandupInputProps> = ({
   selectedTicketIds = [],
   onToggleTicket
 }) => {
-  const [isListening, setIsListening] = useState(false);
-  const [interimInput, setInterimInput] = useState('');
-  const [speechSupported, setSpeechSupported] = useState(false);
-  
-  const recognitionRef = useRef<any>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  // We use a ref for value to access the latest state inside the event listener 
-  // without triggering a re-initialization of the recognition instance.
-  const valueRef = useRef(value);
-
-  // Sync ref with prop
-  useEffect(() => {
-    valueRef.current = value;
-  }, [value]);
-
-  useEffect(() => {
-    const iWindow = window as unknown as IWindow;
-    const SpeechRecognition = iWindow.SpeechRecognition || iWindow.webkitSpeechRecognition;
-    
-    if (SpeechRecognition) {
-      setSpeechSupported(true);
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onstart = () => {
-        setIsListening(true);
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-        setInterimInput('');
-      };
-
-      recognition.onerror = (event: any) => {
-        console.error("Speech recognition error", event.error);
-        setIsListening(false);
-        setInterimInput('');
-      };
-
-      recognition.onresult = (event: any) => {
-        let finalTranscript = '';
-        let currentInterim = '';
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          } else {
-            currentInterim += event.results[i][0].transcript;
-          }
-        }
-
-        if (finalTranscript) {
-           // Clean the transcript by removing extra whitespace and newlines
-           const cleanTranscript = finalTranscript.replace(/\s+/g, ' ').trim();
-           // Append to the latest value from ref
-           const separator = valueRef.current && !valueRef.current.endsWith('\n') && !valueRef.current.endsWith(' ') ? ' ' : '';
-           const newValue = valueRef.current + separator + cleanTranscript;
-           onChange(newValue);
-           // valueRef update happens in the other useEffect
-        }
-        
-        setInterimInput(currentInterim);
-      };
-
-      recognitionRef.current = recognition;
-    }
-    
-    // Cleanup
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-    };
-  }, []); // Empty dependency array ensures we don't recreate the instance
-
-  const toggleListening = useCallback(() => {
-    if (!recognitionRef.current) return;
-    if (isListening) {
-      recognitionRef.current.stop();
-    } else {
-      try {
-        recognitionRef.current.start();
-        textareaRef.current?.focus();
-      } catch (e) {
-        console.warn("Recognition already started or failed to start");
-      }
-    }
-  }, [isListening]);
-
   const toggleTicket = (ticket: JiraTicket) => {
     if (onToggleTicket) {
       onToggleTicket(ticket.id);
@@ -151,27 +60,6 @@ export const StandupInput: React.FC<StandupInputProps> = ({
               Roll
             </button>
           )}
-          {speechSupported && (
-            <button
-              onClick={toggleListening}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                isListening 
-                  ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' 
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-indigo-600'
-              }`}
-            >
-              {isListening ? (
-                 <span className="flex items-center gap-1">
-                   <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></span>
-                   <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce delay-100"></span>
-                   <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce delay-200"></span>
-                 </span>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>
-              )}
-              {isListening ? 'Stop' : 'Rec'}
-            </button>
-          )}
         </div>
       </div>
 
@@ -199,33 +87,10 @@ export const StandupInput: React.FC<StandupInputProps> = ({
          </div>
       )}
 
-      {/* Voice Processing Indicator */}
-      {isListening && (
-        <div className="absolute bottom-24 left-6 right-6 z-20 animate-in slide-in-from-bottom-5 fade-in duration-300 pointer-events-none">
-          <div className="bg-slate-900/90 dark:bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-2xl flex items-center gap-4 border border-white/10 dark:border-slate-200">
-            <div className="flex items-center gap-1 h-6">
-               <div className="w-1 h-3 bg-red-500 rounded-full animate-[pulse_1s_ease-in-out_infinite]"></div>
-               <div className="w-1 h-5 bg-red-500 rounded-full animate-[pulse_1s_ease-in-out_infinite_0.1s]"></div>
-               <div className="w-1 h-4 bg-red-500 rounded-full animate-[pulse_1s_ease-in-out_infinite_0.2s]"></div>
-               <div className="w-1 h-2 bg-red-500 rounded-full animate-[pulse_1s_ease-in-out_infinite_0.3s]"></div>
-            </div>
-            <div className="flex-1">
-              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
-                Processing Voice Input...
-              </p>
-              <p className="text-sm font-medium text-white dark:text-slate-800 italic truncate min-h-[20px]">
-                {interimInput || "Listening..."}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="flex-1 relative bg-slate-50/20 dark:bg-slate-900/20">
         <textarea
-          ref={textareaRef}
           className="w-full h-full p-8 sm:p-10 resize-none bg-transparent focus:outline-none text-base sm:text-lg text-slate-700 dark:text-slate-200 leading-relaxed placeholder:text-slate-400 font-medium"
-          placeholder="What's happening? Type or speak your updates..."
+          placeholder="What's happening? Type your updates..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
@@ -249,7 +114,7 @@ export const StandupInput: React.FC<StandupInputProps> = ({
         <Button 
             onClick={onGenerate} 
             isLoading={isGenerating} 
-            disabled={(!value.trim() && selectedTicketIds.length === 0) && !isListening}
+            disabled={!value.trim() && selectedTicketIds.length === 0}
             className="w-full sm:w-auto px-12 h-14 rounded-[20px] shadow-2xl shadow-indigo-500/30 text-xs font-black uppercase tracking-[0.2em] transform hover:translate-y-[-2px] transition-transform"
         >
           Synthesize Now
