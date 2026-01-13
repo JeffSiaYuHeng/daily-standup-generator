@@ -220,7 +220,14 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                     >
                       <div className="flex justify-between items-start mb-2">
                         <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 rounded-md">
-                          {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                          {(() => {
+                            const date = new Date(entry.date);
+                            const day = date.getDate();
+                            const month = date.getMonth() + 1;
+                            const year = date.getFullYear();
+                            const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+                            return `${day}/${month}/${year} ${dayName}`;
+                          })()}
                         </span>
                         <div className="flex gap-1">
                           <button 
