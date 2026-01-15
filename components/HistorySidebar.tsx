@@ -101,7 +101,11 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `standup-history-${new Date().toISOString().split('T')[0]}.json`;
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    link.download = `standup-history-${year}-${month}-${day}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
