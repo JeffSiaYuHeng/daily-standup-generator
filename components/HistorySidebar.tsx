@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeftIcon, Cog6ToothIcon, PlusIcon, ArrowPathIcon, TrashIcon, XMarkIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, Cog6ToothIcon, PlusIcon, ArrowPathIcon, TrashIcon, XMarkIcon, ClockIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { StandupEntry } from '../types';
 import { isSupabaseConfigured } from '../services/supabaseClient';
@@ -94,6 +94,20 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
     }
   };
 
+  const handleExport = () => {
+    if (history.length === 0) return;
+    const jsonString = JSON.stringify(history, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `standup-history-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const handleEntryClick = (entry: StandupEntry) => {
     setSelectedEntry(entry);
     setView('detail');
@@ -181,6 +195,16 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                       title="Sync with Cloud"
                     >
                        <ArrowPathIcon className={`w-[18px] h-[18px] ${isSyncing ? 'animate-spin' : ''}`} />
+                    </button>
+                  )}
+                  
+                  {history.length > 0 && (
+                    <button
+                      onClick={handleExport}
+                      className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 rounded-xl transition-all border border-transparent"
+                      title="Export History to JSON"
+                    >
+                      <ArrowDownTrayIcon className="w-[18px] h-[18px]" />
                     </button>
                   )}
                 </>
