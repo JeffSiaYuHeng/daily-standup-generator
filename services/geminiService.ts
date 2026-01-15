@@ -27,7 +27,7 @@ Your goal is to take raw, messy notes or voice transcripts and convert them into
 
 ### Formatting Rules:
 - **Format**:
-  <Date (e.g., Oct 24, 2023)>
+  <Date (e.g., 15/10/2024 Thursday)>
   **What I did the last working day:**
   - [Task 1]
   **Blockers:**
