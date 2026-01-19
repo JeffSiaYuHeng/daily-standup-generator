@@ -287,7 +287,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                             const month = date.getMonth() + 1;
                             const year = date.getFullYear();
                             const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-                            return `${day}/${month}/${year} ${dayName}`;
+                            return `${month}/${day}/${year} ${dayName}`;
                           })()}
                         </span>
                         <div className="flex gap-1">
@@ -563,6 +563,13 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
                 </div>
               </form>
             )}
+          </div>
+          
+          {/* Version Footer */}
+          <div className="flex-none py-3 text-center border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">
+              Version V1.3.1
+            </p>
           </div>
         </div>
       </div>
