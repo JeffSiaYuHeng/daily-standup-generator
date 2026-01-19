@@ -445,8 +445,7 @@ function App() {
 
       <HistorySidebar 
         isOpen={isSidebarOpen}
-        setIsOpen={setIsSidebarFrom App.tsx)
-    It appears the change is already applied. I will revert this change.Open}
+        setIsOpen={setIsSidebarOpen}
         history={history}
         isLoading={isHistoryLoading}
         onSelect={handleLoadHistory}
