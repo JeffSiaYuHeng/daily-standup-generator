@@ -11,6 +11,7 @@ interface HistorySidebarProps {
   onSelect: (entry: StandupEntry) => void;
   onDelete: (id: string) => void;
   onSaveManualEntry: (entry: StandupEntry) => void;
+  onUpdate: (entry: StandupEntry) => void;
   onSync: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -25,6 +26,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
   onSelect, 
   onDelete,
   onSaveManualEntry,
+  onUpdate,
   onSync,
   isOpen, 
   setIsOpen,
@@ -33,6 +35,10 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 }) => {
   const [view, setView] = useState<SidebarView>('list');
   const [selectedEntry, setSelectedEntry] = useState<StandupEntry | null>(null);
+  const [isEditingEntry, setIsEditingEntry] = useState(false);
+  const [editDate, setEditDate] = useState('');
+  const [editRaw, setEditRaw] = useState('');
+  const [editOutput, setEditOutput] = useState('');
   const [manualDate, setManualDate] = useState(new Date().toISOString().split('T')[0]);
   const [manualRaw, setManualRaw] = useState('');
   const [manualOutput, setManualOutput] = useState('');
@@ -114,16 +120,43 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 
   const handleEntryClick = (entry: StandupEntry) => {
     setSelectedEntry(entry);
+    setIsEditingEntry(false);
+    const dateObj = new Date(entry.date);
+    setEditDate(dateObj.toISOString().split('T')[0]);
+    setEditRaw(entry.rawInput);
+    setEditOutput(entry.generatedOutput);
     setView('detail');
   };
 
   const handleBack = () => {
     setView('list');
     setSelectedEntry(null);
+    setIsEditingEntry(false);
   };
 
   const handleRestoreAction = (entry: StandupEntry) => {
     onSelect(entry);
+    handleBack();
+  };
+
+  const handleEditToggle = () => {
+    setIsEditingEntry(!isEditingEntry);
+  };
+
+  const handleUpdateEntry = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedEntry || !editRaw || !editOutput || !editDate) return;
+    
+    const dateObj = new Date(editDate + 'T12:00:00');
+    const updatedEntry: StandupEntry = {
+      ...selectedEntry,
+      date: dateObj.toISOString(),
+      rawInput: editRaw,
+      generatedOutput: editOutput
+    };
+    
+    onUpdate(updatedEntry);
+    setIsEditingEntry(false);
     handleBack();
   };
 
@@ -287,36 +320,111 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
               </div>
             ) : view === 'detail' && selectedEntry ? (
               <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-4">
-                <div className="p-6 space-y-6">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Raw Notes History</label>
-                    <div className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-h-40 overflow-y-auto whitespace-pre-wrap">
-                      {selectedEntry.rawInput}
-                    </div>
-                  </div>
+                {isEditingEntry ? (
+                  <form onSubmit={handleUpdateEntry} className="flex flex-col h-full">
+                    <div className="p-6 space-y-5 overflow-y-auto">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Standup Date</label>
+                        <input 
+                          type="date"
+                          required
+                          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all"
+                          value={editDate}
+                          onChange={e => setEditDate(e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Raw Notes</label>
+                        <textarea 
+                          required
+                          className="w-full h-32 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none"
+                          value={editRaw}
+                          onChange={e => setEditRaw(e.target.value)}
+                        />
+                      </div>
 
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Generated Standup Preview</label>
-                    <div className="p-4 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl text-xs text-slate-800 dark:text-slate-200 font-mono leading-relaxed max-h-64 overflow-y-auto whitespace-pre-wrap">
-                      {selectedEntry.generatedOutput}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Generated Output</label>
+                        <textarea 
+                          required
+                          className="w-full h-40 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none leading-relaxed"
+                          value={editOutput}
+                          onChange={e => setEditOutput(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="mt-auto p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
-                   <Button 
-                    onClick={() => handleRestoreAction(selectedEntry)}
-                    className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20"
-                   >
-                     Restore to Editor
-                   </Button>
-                   <button 
-                    onClick={handleBack}
-                    className="w-full py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                   >
-                     Go Back
-                   </button>
-                </div>
+                    <div className="mt-auto p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
+                      <Button 
+                        type="submit"
+                        className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20"
+                      >
+                        Save Changes
+                      </Button>
+                      <button 
+                        type="button"
+                        onClick={handleEditToggle}
+                        className="w-full py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div className="p-6 space-y-6">
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Entry Date</label>
+                        <div className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-600 dark:text-slate-300 font-bold leading-relaxed">
+                          {(() => {
+                            const date = new Date(selectedEntry.date);
+                            const day = date.getDate();
+                            const month = date.getMonth() + 1;
+                            const year = date.getFullYear();
+                            const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+                            return `${month}/${day}/${year} ${dayName}`;
+                          })()}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Raw Notes History</label>
+                        <div className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-h-40 overflow-y-auto whitespace-pre-wrap">
+                          {selectedEntry.rawInput}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Generated Standup Preview</label>
+                        <div className="p-4 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl text-xs text-slate-800 dark:text-slate-200 font-mono leading-relaxed max-h-64 overflow-y-auto whitespace-pre-wrap">
+                          {selectedEntry.generatedOutput}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-auto p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
+                      <Button 
+                        onClick={handleEditToggle}
+                        className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-amber-500/20 bg-amber-600 hover:bg-amber-500"
+                      >
+                        Edit Entry
+                      </Button>
+                      <Button 
+                        onClick={() => handleRestoreAction(selectedEntry)}
+                        className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20"
+                      >
+                        Restore to Editor
+                      </Button>
+                      <button 
+                        onClick={handleBack}
+                        className="w-full py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                      >
+                        Go Back
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             ) : view === 'settings' ? (
               <form onSubmit={handleSettingsSave} className="p-6 space-y-5 animate-in slide-in-from-right-4">

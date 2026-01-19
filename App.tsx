@@ -239,6 +239,16 @@ function App() {
     }
   };
 
+  const handleUpdateHistory = async (entry: StandupEntry) => {
+    try {
+      const updated = await updateEntry(entry);
+      setHistory(updated);
+      toast.success("Entry updated successfully");
+    } catch (err) {
+      toast.error("Failed to update entry");
+    }
+  };
+
   const handleDeleteHistory = async (id: string) => {
     try {
       const updated = await deleteEntry(id);
@@ -451,6 +461,7 @@ function App() {
         onSelect={handleLoadHistory}
         onDelete={handleDeleteHistory}
         onSaveManualEntry={handleManualHistorySave}
+        onUpdate={handleUpdateHistory}
         onSync={handleSync}
         isSyncing={isSyncing}
       />
