@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { GenerationRequest, GenerationResult } from '../types';
+import { formatStandupDate } from '../utils/dateFormatter';
 
 const GEMINI_API_KEY_STORAGE = 'GEMINI_API_KEY';
 
@@ -27,7 +28,7 @@ Your goal is to take raw, messy notes or voice transcripts and convert them into
 
 ### Formatting Rules:
 - **Format**:
-  <Date (e.g., 15/10/2024 Thursday)>
+  <Date (e.g., 7/1/2026 Wednesday)>
   **What I did the last working day:**
   - [Task 1]
   **Blockers:**
@@ -56,7 +57,7 @@ export const generateStandup = async (request: GenerationRequest): Promise<Gener
   const ai = new GoogleGenAI({ apiKey });
 
   try {
-    let prompt = `Current Date: ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n`;
+    let prompt = `Current Date: ${formatStandupDate(new Date())}\n`;
     
     if (request.selectedTickets && request.selectedTickets.length > 0) {
       prompt += `\nSelected Active Jira Tickets (Include these in "Working on today" or "Last working day" based on context):\n`;
