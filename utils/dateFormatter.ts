@@ -1,12 +1,18 @@
 
 // utils/dateFormatter.ts
 export const formatStandupDate = (date: Date): string => {
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'numeric',
     day: 'numeric',
-    year: 'numeric',
+    year: 'numeric'
+  };
+  const weekdayOptions: Intl.DateTimeFormatOptions = {
     weekday: 'long'
   };
+  
+  const dateStr = date.toLocaleDateString('en-US', dateOptions);
+  const weekday = date.toLocaleDateString('en-US', weekdayOptions);
+  
   // Example output: 7/1/2026 Wednesday
-  return date.toLocaleDateString('en-US', options);
+  return `${dateStr} ${weekday}`;
 };

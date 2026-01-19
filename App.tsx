@@ -439,9 +439,14 @@ function App() {
         )}
       </main>
 
+      <div className="flex-none py-2 text-center text-xs text-slate-400 dark:text-slate-600">
+        Version V1.3.1
+      </div>
+
       <HistorySidebar 
         isOpen={isSidebarOpen}
-        setIsOpen={setIsSidebarOpen}
+        setIsOpen={setIsSidebarFrom App.tsx)
+    It appears the change is already applied. I will revert this change.Open}
         history={history}
         isLoading={isHistoryLoading}
         onSelect={handleLoadHistory}
