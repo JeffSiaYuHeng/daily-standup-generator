@@ -68,35 +68,12 @@ This tool is designed for engineers who want to maintain a consistent project na
 5. **Save**: Click "Save" to commit the entry to your history.
 6. **Manage Tickets**: Switch to the "Jira" tab to track your current sprint tasks.
 
-## 📂 Project Structure
 ## 🛠️ Tech Stack
-
-The application is organized to separate UI concerns from AI and data logic:
-
-```text
-src/
-├── components/
-│   ├── drafting/       # Note input, Voice dictation, and Context controls
-│   ├── preview/        # AI output display and Refinement interface
-│   ├── tickets/        # Jira-style task management and Checkbox injection
-│   └── shared/         # Reusable UI elements (Buttons, Cards, Modals)
-├── hooks/
-│   ├── useGemini.js    # Interface with Google Gemini Pro API
-│   ├── useDictation.js # Browser Speech Recognition integration
-│   └── useStore.js     # State management for tickets and history
-├── lib/
-│   ├── gemini.js       # AI model configuration and prompt engineering
-│   └── supabase.js     # Database connection and sync logic
-└── App.jsx             # Main application layout and routing
-```
-
-## �️ Tech Stack
 
 - **Framework**: React 19 (ES6 Modules)
 - **AI**: Google GenAI SDK (Gemini 3 Pro)
 - **Database**: Supabase (PostgreSQL)
 - **Styling**: Tailwind CSS (Mobile-First)
-- **PWA**: Workbox (Offline Capabilities)
 - **Icons**: Lucide-style SVG icons
 
 ---
