@@ -201,17 +201,16 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                        <ArrowPathIcon className={`w-[18px] h-[18px] ${isSyncing ? 'animate-spin' : ''}`} />
                     </button>
                   )}
-                  
-                  {history.length > 0 && (
-                    <button
-                      onClick={handleExport}
-                      className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 rounded-xl transition-all border border-transparent"
-                      title="Export History to JSON"
-                    >
-                      <ArrowDownTrayIcon className="w-[18px] h-[18px]" />
-                    </button>
-                  )}
                 </>
+              )}
+              {history.length > 0 && (
+                <button
+                  onClick={handleExport}
+                  className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 rounded-xl transition-all border border-transparent"
+                  title="Export History to JSON"
+                >
+                  <ArrowDownTrayIcon className="w-[18px] h-[18px]" />
+                </button>
               )}
               <button 
                 onClick={() => setIsOpen(false)}
