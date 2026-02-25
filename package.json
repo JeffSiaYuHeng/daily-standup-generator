@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen:structure": "node scripts/generate-structure.cjs",
+    "gen:graph": "node scripts/generate-dependency-graph.js"
   },
   "dependencies": {
     "@google/genai": "^1.35.0",
