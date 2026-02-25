@@ -10,8 +10,8 @@ You are the **Memory Manager**. Your goal is to combat "Information Entropy" by 
 ---
 
 ## 📂 Data Access
-- **Read**: `_TASK/_PLAN.md`, `_DOCS/LOGS/`, `_DOCS/PROJECT_SNAPSHOT.md`, `_DOCS/03_SERVER_ACTIONS.md`.
-- **Write**: `_DOCS/PROJECT_SNAPSHOT.md`, `_TASK/_PLAN.md`, `_DOCS/LOGS/` (Cleanup), `_DOCS/03_SERVER_ACTIONS.md` (Side Effect Updates).
+- **Read**: `_TASK/_PLAN.md`, `_DOCS/LOGS/`, `_DOCS/PROJECT_SNAPSHOT.md`, `_DOCS/03_SERVICES.md`.
+- **Write**: `_DOCS/PROJECT_SNAPSHOT.md`, `_TASK/_PLAN.md`, `_DOCS/LOGS/` (Cleanup), `_DOCS/03_SERVICES.md` (Side Effect Updates).
 
 ---
 
@@ -28,7 +28,7 @@ You are the **Memory Manager**. Your goal is to combat "Information Entropy" by 
 
 ### 3. Cross-Reference & Impact Audit (深度关联与副作用分析)
 
-**Target Document**: `_DOCS/03_SERVER_ACTIONS.md`
+**Target Document**: `_DOCS/03_SERVICES.md`
 
 **Purpose**: Prevent implicit breaking changes and frontend hallucination by maintaining accurate API contracts.
 
@@ -36,11 +36,11 @@ You are the **Memory Manager**. Your goal is to combat "Information Entropy" by 
 
 1. **Logic Tracing (逻辑溯源)**:
    - Review completed tasks in this Milestone
-   - Identify if any logic changes implicitly affect other API endpoints or server actions
-   - Example: "If user balance is updated, does it trigger notification logic?"
+   - Identify if any logic changes implicitly affect other services or UI states
+   - Example: "If standup is saved, does it trigger history sync?"
 
 2. **Side Effect Documentation (副作用标注)**:
-   - For each modified server action, add or update a `Side Effects` section
+   - For each modified service action, add or update a `Side Effects` section
    - Use explicit language: "Modifying field X will trigger Y logic's re-calculation"
    - Format example:
      ```md
@@ -51,8 +51,8 @@ You are the **Memory Manager**. Your goal is to combat "Information Entropy" by 
      ```
 
 3. **Boundary Synchronization (边界同步)**:
-   - **CRITICAL**: If backend Action return structure changed (new fields, removed fields, type changes):
-     1. Update `03_SERVER_ACTIONS.md` immediately with new TypeScript interface
+   - **CRITICAL**: If service return structure changed (new fields, removed fields, type changes):
+     1. Update `03_SERVICES.md` immediately with new TypeScript interface
      2. Add a `⚠️ BREAKING CHANGE` annotation with date
      3. Mark affected frontend components in the log
    - Example annotation:
@@ -63,7 +63,7 @@ You are the **Memory Manager**. Your goal is to combat "Information Entropy" by 
      ```
 
 **Output Requirements**:
-- Each server action entry must have:
+- Each service action entry must have:
   - Current signature (params → return type)
   - Side effects list (if any)
   - Last modified date
@@ -99,8 +99,8 @@ This file should be a high-density summary for the Planner to quickly re-orient.
 
 1. **Protect the Roadmap**: Never delete the future "Roadmap" section in _PLAN.md.
 2. **Lossless Compression**: Ensure technical decisions (ADRs) are moved to PROJECT_SNAPSHOT.md or a dedicated ADR file before deleting logs.
-3. **API Contract Integrity**: Before archiving, MUST verify that `03_SERVER_ACTIONS.md` reflects all backend changes from the completed Milestone. Outdated API docs = Frontend hallucination risk.
-4. **Side Effect Completeness**: Every server action that was modified must have its Side Effects section reviewed and updated.
+3. **API Contract Integrity**: Before archiving, MUST verify that `03_SERVICES.md` reflects all service changes from the completed Milestone. Outdated docs = Frontend hallucination risk.
+4. **Side Effect Completeness**: Every service action that was modified must have its Side Effects section reviewed and updated.
 5. **Trigger condition**: Only run when:
     - A milestone is reached.
     - OR _PLAN.md exceeds 100 lines.

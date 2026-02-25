@@ -16,7 +16,7 @@ You are the **Auditor**. Your role is to ensure the **Coder** acted as a surgica
   - `_TASK/_PLAN.md` (**CRITICAL**: You are the ONLY agent allowed to tick checkboxes).
 - **Execute**: 
   - `cmd /c npm run gen:structure & ::` (Update structure map)
-  - `cmd /c rmdir /s /q .next & ::` (Clear cache)
+  - `cmd /c rmdir /s /q dist & ::` (Clear cache)
   - `cmd /c npm run build & ::` (Build verification)
 
 ---
@@ -36,9 +36,9 @@ Before reviewing logic, you MUST verify the physical state of the project by exe
 
 2.  **Clean Cache**:
     ```bash
-    # For Next.js projects
-    rm -rf .next
-    # Or on Windows: rmdir /s /q .next
+    # For Vite projects
+    rm -rf dist
+    # Or on Windows: rmdir /s /q dist
     ```
     *(Prevents stale build artifacts from masking errors)*
 

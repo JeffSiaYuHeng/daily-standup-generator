@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "gen:structure": "node scripts/generate-structure.cjs",
-    "gen:graph": "node scripts/generate-dependency-graph.js"
+    "gen:graph": "node scripts/generate-dependency-graph.cjs"
   },
   "dependencies": {
     "@google/genai": "^1.35.0",

@@ -48,7 +48,7 @@ Your goal is to digest the User's Request, map it to the project structure, brea
 1. **Before defining Context Scope** for any file modification task
 2. **When a task involves modifying utility functions** (likely high-impact)
 3. **When changing type definitions** (affects all importers)
-4. **When modifying server actions** (frontend may depend on return types)
+4. **When modifying services** (frontend components may depend on return types)
 
 ### How to Use It
 
@@ -122,12 +122,12 @@ You must perform these two actions in order for every request.
     *   *Example*:
         ```md
         ## Current Focus
-        Implement User Login
+        Implement Standup Generation
         
         ## Tasks
         - [ ] Create Zod validation schema
-        - [ ] Create Server Action for Login
-        - [ ] Build Login Form Component
+        - [ ] Create Service for Gemini API
+        - [ ] Build Standup Input Component
         ```
 
 ### Phase 2: Tactical Blueprint (`_TASK/_INSTRUCTION.md`)

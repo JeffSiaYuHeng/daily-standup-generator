@@ -5,25 +5,21 @@
 **Usage**: Define the roadmap and current focus here. This generates the instructions for the AI.
 
 ## Roadmap
-1. **Package Opening Flow**: Implement the unboxing ritual (UNOPENED → BLANK). [DONE]
-2. **Workbench Refactor**: Relocate logic and restore Industrial UI design. [DONE]
-3. **Admin Dashboard**: Create a central navigation hub for admin tools. [PAUSED]
-4. **Recording Flow**: Implement workbench for BLANK → DRAFT → SEALED. [DONE]
+1. **Core Features Phase**: Implement standup generation and history. [DONE]
+2. **UX Polish**: Fix date formatting and edit mode bugs. [ACTIVE]
 
 ---
 
 ## CURRENT FOCUS
-**GOAL**: Fix Audio Playback URL Generation Bug
+**GOAL**: Fix Date Formatting and Edit Mode Data Binding
 
 **Context**:
-- Audio playback fails with `NotSupportedError: The element has no supported sources`.
-- User manually replaced R2 presigned URL logic with Supabase public URL hardcoding.
-- Files are stored in R2 (confirmed by `lib/storage/client.ts` and `lib/storage/upload.ts`).
-- The `storage_key` field in DB contains the R2 object key.
+- User reported that the date format displays incorrectly. The user specified the desired date format should be `D/M/YYYY dddd` (e.g., "25/2/2026 Wednesday").
+- In edit mode, the user is "not able to have the edit on the date and detail," indicating a data binding or state issue in the history entry editing flow (e.g., in `HistorySidebar.tsx`). The edit form may not be properly updating the state or passing the right data to the parent.
 
 **Tasks**:
-- [ ] **Fix URL Signing**: Restore R2 `getSignedUrl` with `GetObjectCommand` in `getTapePlaybackConfig`.
-- [ ] **Add URL Helper**: Create reusable `generatePresignedGetUrl` function in `lib/storage/upload.ts`.
+- [ ] **Fix Date Formatting**: Update `HistorySidebar.tsx` and related components to format dates consistently as `D/M/YYYY dddd` (e.g., `25/2/2026 Wednesday`).
+- [ ] **Fix Edit Mode Binder**: Debug and fix `HistorySidebar.tsx`'s `handleUpdateEntry` and form inputs to ensure edits to the date, raw notes, and generated output correctly propagate and persist.
 
 ---
 

@@ -21,14 +21,14 @@ interface HistorySidebarProps {
 
 type SidebarView = 'list' | 'add' | 'detail' | 'settings';
 
-export const HistorySidebar: React.FC<HistorySidebarProps> = ({ 
-  history, 
-  onSelect, 
+export const HistorySidebar: React.FC<HistorySidebarProps> = ({
+  history,
+  onSelect,
   onDelete,
   onSaveManualEntry,
   onUpdate,
   onSync,
-  isOpen, 
+  isOpen,
   setIsOpen,
   isLoading = false,
   isSyncing = false
@@ -42,11 +42,11 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
   const [manualDate, setManualDate] = useState(new Date().toISOString().split('T')[0]);
   const [manualRaw, setManualRaw] = useState('');
   const [manualOutput, setManualOutput] = useState('');
-  
+
   // Settings State
   const [settingsUrl, setSettingsUrl] = useState('');
   const [settingsKey, setSettingsKey] = useState('');
-  
+
   const isConfigured = isSupabaseConfigured();
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
   const handleManualSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!manualRaw || !manualOutput || !manualDate) return;
-    
+
     const dateObj = new Date(manualDate + 'T12:00:00');
 
     onSaveManualEntry({
@@ -77,7 +77,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
       generatedOutput: manualOutput,
       consistencyNotes: []
     } as StandupEntry);
-    
+
     setManualDate(new Date().toISOString().split('T')[0]);
     setManualRaw('');
     setManualOutput('');
@@ -92,9 +92,9 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
     }));
     window.location.reload(); // Reload to re-init supabase client
   };
-  
+
   const handleSettingsDisconnect = () => {
-    if(confirm("Are you sure you want to disconnect? This will switch to local storage.")) {
+    if (confirm("Are you sure you want to disconnect? This will switch to local storage.")) {
       localStorage.removeItem('supabase_settings');
       window.location.reload();
     }
@@ -146,7 +146,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
   const handleUpdateEntry = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedEntry || !editRaw || !editOutput || !editDate) return;
-    
+
     const dateObj = new Date(editDate + 'T12:00:00');
     const updatedEntry: StandupEntry = {
       ...selectedEntry,
@@ -154,7 +154,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
       rawInput: editRaw,
       generatedOutput: editOutput
     };
-    
+
     onUpdate(updatedEntry);
     setIsEditingEntry(false);
     handleBack();
@@ -162,7 +162,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 
   return (
     <>
-      <div 
+      <div
         className={`fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsOpen(false)}
       />
@@ -175,7 +175,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
           <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900 z-10">
             <div className="flex items-center gap-3">
               {(view === 'add' || view === 'detail' || view === 'settings') && (
-                <button 
+                <button
                   onClick={handleBack}
                   className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors text-slate-500"
                 >
@@ -183,31 +183,31 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                 </button>
               )}
               <div>
-                  <h2 className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
-                    {view === 'list' ? (isConfigured ? 'History (Synced)' : 'History (Local)') : 
-                     view === 'add' ? 'Manual Entry' : 
-                     view === 'settings' ? 'Database Config' : 'Review Entry'}
-                  </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-500 font-medium mt-0.5">
-                    {view === 'list' ? `${history.length} saved entries` : 
-                     view === 'add' ? 'Backfill a past standup' : 
-                     view === 'settings' ? 'Connect Supabase' : 'Full details'}
-                  </p>
+                <h2 className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
+                  {view === 'list' ? (isConfigured ? 'History (Synced)' : 'History (Local)') :
+                    view === 'add' ? 'Manual Entry' :
+                      view === 'settings' ? 'Database Config' : 'Review Entry'}
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-500 font-medium mt-0.5">
+                  {view === 'list' ? `${history.length} saved entries` :
+                    view === 'add' ? 'Backfill a past standup' :
+                      view === 'settings' ? 'Connect Supabase' : 'Full details'}
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-1.5">
               {view === 'list' && (
                 <>
                   {!isConfigured ? (
-                    <button 
+                    <button
                       onClick={() => setView('settings')}
                       className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all shadow-lg shadow-indigo-500/20"
                     >
                       Connect DB
                     </button>
                   ) : (
-                    <button 
+                    <button
                       onClick={() => setView('settings')}
                       className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
                       title="Settings"
@@ -215,15 +215,15 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                       <Cog6ToothIcon className="w-[18px] h-[18px]" />
                     </button>
                   )}
-                  
-                  <button 
+
+                  <button
                     onClick={() => setView('add')}
                     className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 rounded-xl transition-all border border-indigo-100 dark:border-indigo-900/30"
                     title="Add past standup manually"
                   >
                     <PlusIcon className="w-[18px] h-[18px]" />
                   </button>
-                  
+
                   {isConfigured && (
                     <button
                       onClick={onSync}
@@ -231,7 +231,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                       className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 rounded-xl transition-all border border-transparent disabled:opacity-50"
                       title="Sync with Cloud"
                     >
-                       <ArrowPathIcon className={`w-[18px] h-[18px] ${isSyncing ? 'animate-spin' : ''}`} />
+                      <ArrowPathIcon className={`w-[18px] h-[18px] ${isSyncing ? 'animate-spin' : ''}`} />
                     </button>
                   )}
                 </>
@@ -245,7 +245,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                   <ArrowDownTrayIcon className="w-[18px] h-[18px]" />
                 </button>
               )}
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
                 className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 rounded-xl transition-all border border-transparent"
                 title="Close Sidebar"
@@ -274,9 +274,9 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                   </div>
                 ) : (
                   history.map((entry) => (
-                    <div 
-                      key={entry.id} 
-                      className="group relative border border-slate-200 dark:border-slate-800 rounded-2xl p-4 hover:border-indigo-400 hover:shadow-lg transition-all bg-white dark:bg-slate-800/50 cursor-pointer" 
+                    <div
+                      key={entry.id}
+                      className="group relative border border-slate-200 dark:border-slate-800 rounded-2xl p-4 hover:border-indigo-400 hover:shadow-lg transition-all bg-white dark:bg-slate-800/50 cursor-pointer"
                       onClick={() => handleEntryClick(entry)}
                     >
                       <div className="flex justify-between items-start mb-2">
@@ -287,23 +287,23 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                             const month = date.getMonth() + 1;
                             const year = date.getFullYear();
                             const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-                            return `${month}/${day}/${year} ${dayName}`;
+                            return `${day}/${month}/${year} ${dayName}`;
                           })()}
                         </span>
                         <div className="flex gap-1">
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); handleRestoreAction(entry); }}
                             className="p-1.5 bg-slate-50 dark:bg-slate-900 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
                             title="Restore into Editor"
                           >
                             <ArrowPathIcon className="w-3 h-3" />
                           </button>
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); onDelete(entry.id); }}
                             className="text-slate-300 hover:text-red-500 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             title="Delete"
                           >
-                             <TrashIcon className="w-3 h-3" />
+                            <TrashIcon className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
@@ -325,7 +325,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                     <div className="p-6 space-y-5 overflow-y-auto">
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Standup Date</label>
-                        <input 
+                        <input
                           type="date"
                           required
                           className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all"
@@ -333,10 +333,10 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                           onChange={e => setEditDate(e.target.value)}
                         />
                       </div>
-                      
+
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Raw Notes</label>
-                        <textarea 
+                        <textarea
                           required
                           className="w-full h-32 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none"
                           value={editRaw}
@@ -346,7 +346,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Generated Output</label>
-                        <textarea 
+                        <textarea
                           required
                           className="w-full h-40 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none leading-relaxed"
                           value={editOutput}
@@ -356,13 +356,13 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                     </div>
 
                     <div className="mt-auto p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
-                      <Button 
+                      <Button
                         type="submit"
                         className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20"
                       >
                         Save Changes
                       </Button>
-                      <button 
+                      <button
                         type="button"
                         onClick={handleEditToggle}
                         className="w-full py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
@@ -383,7 +383,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                             const month = date.getMonth() + 1;
                             const year = date.getFullYear();
                             const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-                            return `${month}/${day}/${year} ${dayName}`;
+                            return `${day}/${month}/${year} ${dayName}`;
                           })()}
                         </div>
                       </div>
@@ -404,19 +404,19 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                     </div>
 
                     <div className="mt-auto p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
-                      <Button 
+                      <Button
                         onClick={handleEditToggle}
                         className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-amber-500/20 bg-amber-600 hover:bg-amber-500"
                       >
                         Edit Entry
                       </Button>
-                      <Button 
+                      <Button
                         onClick={() => handleRestoreAction(selectedEntry)}
                         className="w-full h-12 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20"
                       >
                         Restore to Editor
                       </Button>
-                      <button 
+                      <button
                         onClick={handleBack}
                         className="w-full py-3 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                       >
@@ -429,54 +429,54 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
             ) : view === 'settings' ? (
               <form onSubmit={handleSettingsSave} className="p-6 space-y-5 animate-in slide-in-from-right-4">
                 <div className="p-3 sm:p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl text-indigo-900 dark:text-indigo-200 mb-6">
-                   <p className="font-bold mb-2 text-sm sm:text-base">Sync your history</p>
-                   <p className="opacity-80 leading-relaxed text-xs mb-3">Enter your Supabase project credentials to enable cloud synchronization. This will allow you to access your standup history across devices.</p>
-                   <p className="opacity-70 leading-relaxed text-xs border-t border-indigo-200 dark:border-indigo-800 pt-3 mt-3">
-                     <strong>Setup required:</strong> Before connecting, run this SQL in your Supabase SQL Editor (Database → SQL Editor):
-                   </p>
-                   <div className="mt-3 p-2 sm:p-3 bg-white dark:bg-slate-900 rounded-lg text-[9px] sm:text-[10px] font-mono text-slate-700 dark:text-slate-300 overflow-x-auto max-h-48 sm:max-h-64 overflow-y-auto border border-indigo-100 dark:border-slate-800 whitespace-pre-wrap break-words">
-                     <pre className="text-[9px] sm:text-[10px] leading-tight sm:leading-relaxed">-- Create standups table
-CREATE TABLE IF NOT EXISTS public.standups (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  date TIMESTAMP WITH TIME ZONE NOT NULL,
-  raw_input TEXT NOT NULL,
-  generated_output TEXT NOT NULL,
-  consistency_notes JSONB DEFAULT '[]'::jsonb,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+                  <p className="font-bold mb-2 text-sm sm:text-base">Sync your history</p>
+                  <p className="opacity-80 leading-relaxed text-xs mb-3">Enter your Supabase project credentials to enable cloud synchronization. This will allow you to access your standup history across devices.</p>
+                  <p className="opacity-70 leading-relaxed text-xs border-t border-indigo-200 dark:border-indigo-800 pt-3 mt-3">
+                    <strong>Setup required:</strong> Before connecting, run this SQL in your Supabase SQL Editor (Database → SQL Editor):
+                  </p>
+                  <div className="mt-3 p-2 sm:p-3 bg-white dark:bg-slate-900 rounded-lg text-[9px] sm:text-[10px] font-mono text-slate-700 dark:text-slate-300 overflow-x-auto max-h-48 sm:max-h-64 overflow-y-auto border border-indigo-100 dark:border-slate-800 whitespace-pre-wrap break-words">
+                    <pre className="text-[9px] sm:text-[10px] leading-tight sm:leading-relaxed">-- Create standups table
+                      CREATE TABLE IF NOT EXISTS public.standups (
+                      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                      date TIMESTAMP WITH TIME ZONE NOT NULL,
+                      raw_input TEXT NOT NULL,
+                      generated_output TEXT NOT NULL,
+                      consistency_notes JSONB DEFAULT '[]'::jsonb,
+                      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                      );
 
--- Create jira_tickets table
-CREATE TABLE IF NOT EXISTS public.jira_tickets (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  ticket_key TEXT NOT NULL UNIQUE,
-  title TEXT NOT NULL,
-  status TEXT NOT NULL,
-  link TEXT,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+                      -- Create jira_tickets table
+                      CREATE TABLE IF NOT EXISTS public.jira_tickets (
+                      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                      ticket_key TEXT NOT NULL UNIQUE,
+                      title TEXT NOT NULL,
+                      status TEXT NOT NULL,
+                      link TEXT,
+                      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                      );
 
--- Add indexes
-CREATE INDEX IF NOT EXISTS idx_standups_date
-ON public.standups(date DESC);
-CREATE INDEX IF NOT EXISTS idx_tickets_key
-ON public.jira_tickets(ticket_key);
+                      -- Add indexes
+                      CREATE INDEX IF NOT EXISTS idx_standups_date
+                      ON public.standups(date DESC);
+                      CREATE INDEX IF NOT EXISTS idx_tickets_key
+                      ON public.jira_tickets(ticket_key);
 
--- Enable RLS
-ALTER TABLE public.standups ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.jira_tickets ENABLE ROW LEVEL SECURITY;
+                      -- Enable RLS
+                      ALTER TABLE public.standups ENABLE ROW LEVEL SECURITY;
+                      ALTER TABLE public.jira_tickets ENABLE ROW LEVEL SECURITY;
 
--- Create policies
-CREATE POLICY "Enable all access" 
-ON public.standups FOR ALL USING (true);
+                      -- Create policies
+                      CREATE POLICY "Enable all access"
+                      ON public.standups FOR ALL USING (true);
 
-CREATE POLICY "Enable all access" 
-ON public.jira_tickets FOR ALL USING (true);</pre>
-                   </div>
+                      CREATE POLICY "Enable all access"
+                      ON public.jira_tickets FOR ALL USING (true);</pre>
+                  </div>
                 </div>
-                
+
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Project URL</label>
-                  <input 
+                  <input
                     type="url"
                     required
                     placeholder="https://your-project.supabase.co"
@@ -488,7 +488,7 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
 
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Anon Public Key</label>
-                  <input 
+                  <input
                     type="password"
                     required
                     placeholder="eyJhbGciOiJIUzI1NiIsInR..."
@@ -502,20 +502,20 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
                   <Button type="submit" className="w-full h-11 rounded-xl text-[11px] font-black uppercase tracking-widest shadow-lg shadow-indigo-500/20">
                     Save & Connect
                   </Button>
-                  
+
                   {isConfigured && (
-                    <button 
-                      type="button" 
-                      onClick={handleSettingsDisconnect} 
+                    <button
+                      type="button"
+                      onClick={handleSettingsDisconnect}
                       className="w-full py-3 text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors"
                     >
                       Disconnect & Reset
                     </button>
                   )}
-                  
-                   <button 
-                    type="button" 
-                    onClick={() => setView('list')} 
+
+                  <button
+                    type="button"
+                    onClick={() => setView('list')}
                     className="w-full py-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     Cancel
@@ -526,7 +526,7 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
               <form onSubmit={handleManualSave} className="p-6 space-y-5 animate-in slide-in-from-right-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Standup Date</label>
-                  <input 
+                  <input
                     type="date"
                     required
                     className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all"
@@ -534,10 +534,10 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
                     onChange={e => setManualDate(e.target.value)}
                   />
                 </div>
-                
+
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Raw Notes (for Context)</label>
-                  <textarea 
+                  <textarea
                     required
                     placeholder="Brief bullet points of what happened..."
                     className="w-full h-32 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none"
@@ -548,7 +548,7 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
 
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black uppercase tracking-wider text-slate-400">Formatted Output</label>
-                  <textarea 
+                  <textarea
                     required
                     placeholder="Paste the final standup content here..."
                     className="w-full h-40 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none leading-relaxed"
@@ -564,7 +564,7 @@ ON public.jira_tickets FOR ALL USING (true);</pre>
               </form>
             )}
           </div>
-          
+
           {/* Version Footer */}
           <div className="flex-none py-3 text-center border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             <p className="text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">
