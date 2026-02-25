@@ -83,7 +83,7 @@ daily-standup-generator/
 ├── utils/
 │   └── dateFormatter.ts
 └── scripts/
-    └── generate-dependency-graph.js
+    └── generate-dependency-graph.cjs
     └── generate-structure.cjs
     └── generate-structure.js
 ```
