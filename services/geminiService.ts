@@ -81,7 +81,7 @@ export const generateStandup = async (request: GenerationRequest): Promise<Gener
 
   try {
     let prompt = `Current Date: ${formatStandupDate(new Date())}\n`;
-    
+
     if (request.selectedTickets && request.selectedTickets.length > 0) {
       prompt += `\nSelected Active Jira Tickets (Include these in "Working on today" or "Last working day" based on context):\n`;
       prompt += JSON.stringify(request.selectedTickets.map(t => ({ key: t.ticketKey, title: t.title, status: t.status }))) + `\n`;
@@ -180,7 +180,7 @@ export const generateWeeklyLog = async (entries: StandupEntry[]): Promise<string
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
         systemInstruction: WEEKLY_LOG_INSTRUCTION,
