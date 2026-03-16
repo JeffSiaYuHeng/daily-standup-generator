@@ -14,6 +14,7 @@ import { generateStandup, refineStandup } from './services/geminiService';
 import { StandupEntry, GenerationStatus, GenerationResult, JiraTicket } from './types';
 import { v4 as uuidv4 } from 'uuid';
 import { useToast } from './context/ToastContext';
+import { WeeklyReportGenerator } from './components/WeeklyReportGenerator';
 
 type AppView = 'generator' | 'tickets';
 
@@ -36,6 +37,7 @@ function App() {
   const [isRefining, setIsRefining] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [showApiKeySettings, setShowApiKeySettings] = useState(false);
+  const [showWeeklyReport, setShowWeeklyReport] = useState(false);
   
   const toast = useToast();
 
@@ -464,6 +466,7 @@ function App() {
         onUpdate={handleUpdateHistory}
         onSync={handleSync}
         isSyncing={isSyncing}
+        onOpenWeeklyReport={() => setShowWeeklyReport(true)}
       />
       
       {showApiKeySettings && (
@@ -471,6 +474,10 @@ function App() {
           onClose={() => setShowApiKeySettings(false)}
           onSave={() => toast.success("API key saved successfully")}
         />
+      )}
+
+      {showWeeklyReport && (
+        <WeeklyReportGenerator onClose={() => setShowWeeklyReport(false)} />
       )}
       
       <InstallPrompt />

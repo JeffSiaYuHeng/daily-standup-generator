@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { GenerationRequest, GenerationResult } from '../types';
+import { GenerationRequest, GenerationResult, StandupEntry } from '../types';
 import { formatStandupDate } from '../utils/dateFormatter';
 
 const GEMINI_API_KEY_STORAGE = 'GEMINI_API_KEY';
@@ -47,6 +47,29 @@ You are a professional editor. You will receive an existing standup draft and a 
 Update the standup draft according to the instruction while maintaining the exact markdown structure and professional tone.
 Do not lose existing information unless explicitly asked to remove it.
 Return the result in the same JSON format as before.
+`;
+
+const WEEKLY_LOG_INSTRUCTION = `
+You are a professional software engineer assistant. Your task is to synthesize a week's worth of daily standup entries into a formal, structured Weekly Logbook.
+
+### Writing Rules (CRITICAL):
+1. **First-Person Perspective**: Every sentence MUST start with "I" and use active voice (e.g., "I implemented", "I analyzed"). This is mandatory.
+2. **Daily Details Flow**: For each day's entry, follow this 4-step execution flow:
+   - Context/Situation: What happened first, who you met, what task was assigned.
+   - Action/Task Execution: Tools used, process taken, technical work done.
+   - Purpose/Objective: Why you did it, what problem was being solved.
+   - Result/Learning Outcome: Progress made, skills learned, feedback received.
+3. **Professional Tense**: Use Past Tense for completed work.
+4. **Vocabulary**: Use professional verbs like Attended, Collaborated, Analyzed, Designed, Refined, Updated, Implemented, Documented.
+5. **Detail Level**: Include just enough technical detail to show intellectual contribution. Aim for 120-180 words per daily entry summary.
+
+### Formatting Structure:
+1. **Overview**: A high-level 1-2 paragraph summary of the week's core achievements.
+2. **Daily Breakdown (Mon-Fri)**: A section for each day. If a day is missing from the data, note it as "No record available for this day".
+3. **Obstacles & Risks**: A summary of blockers encountered and unresolved risks.
+4. **Next Week's Outlook**: A brief section on planned goals for the upcoming week.
+
+Return the result as a JSON object with a "weeklyLog" field containing the markdown formatted text.
 `;
 
 export const generateStandup = async (request: GenerationRequest): Promise<GenerationResult> => {
@@ -135,5 +158,48 @@ export const refineStandup = async (currentText: string, instruction: string): P
   } catch (error) {
     console.error("Gemini Refine Error:", error);
     throw new Error("Failed to update standup.");
+  }
+};
+
+export const generateWeeklyLog = async (entries: StandupEntry[]): Promise<string> => {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const ai = new GoogleGenAI({ apiKey });
+
+  try {
+    let prompt = "Weekly Standup Data (Monday to Friday):\n\n";
+    if (entries.length === 0) {
+      prompt += "No data available for this week.";
+    } else {
+      entries.forEach(entry => {
+        prompt += `--- Date: ${entry.date} ---\n`;
+        prompt += `${entry.generatedOutput}\n\n`;
+      });
+    }
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: prompt,
+      config: {
+        systemInstruction: WEEKLY_LOG_INSTRUCTION,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            weeklyLog: { type: Type.STRING }
+          },
+          required: ['weeklyLog']
+        },
+        temperature: 0.2,
+      },
+    });
+
+    const result = JSON.parse(response.text || "{}");
+    return result.weeklyLog || "Failed to generate weekly log content.";
+  } catch (error) {
+    console.error("Gemini Weekly Log Error:", error);
+    throw new Error("Failed to generate weekly report.");
   }
 };

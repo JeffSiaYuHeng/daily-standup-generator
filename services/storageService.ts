@@ -235,6 +235,44 @@ export const getLatestEntry = async (): Promise<StandupEntry | null> => {
   return data ? mapRowToEntry(data) : null;
 };
 
+/**
+ * Fetches standup entries within a specific date range for weekly reporting.
+ */
+export const getWeeklyEntries = async (startDate: string, endDate: string): Promise<StandupEntry[]> => {
+  if (!isClientReady()) {
+    const history = getLocalHistory();
+    return history
+      .filter(entry => entry.date >= startDate && entry.date <= endDate)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from(TABLE_NAME)
+      .select('*')
+      .gte('date', startDate)
+      .lte('date', endDate)
+      .order('date', { ascending: true });
+
+    if (error) {
+      handleSupabaseError(error, "fetching weekly entries");
+      // Fallback
+      const history = getLocalHistory();
+      return history
+        .filter(entry => entry.date >= startDate && entry.date <= endDate)
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    }
+
+    return (data || []).map(mapRowToEntry);
+  } catch (err) {
+    console.error("Unexpected error in getWeeklyEntries:", err);
+    const history = getLocalHistory();
+    return history
+      .filter(entry => entry.date >= startDate && entry.date <= endDate)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+};
+
 // --- Service Methods (Jira Tickets) ---
 
 export const getTickets = async (): Promise<JiraTicket[]> => {

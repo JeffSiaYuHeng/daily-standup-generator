@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeftIcon, Cog6ToothIcon, PlusIcon, ArrowPathIcon, TrashIcon, XMarkIcon, ClockIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, Cog6ToothIcon, PlusIcon, ArrowPathIcon, TrashIcon, XMarkIcon, ClockIcon, ArrowDownTrayIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import { StandupEntry } from '../types';
 import { isSupabaseConfigured } from '../services/supabaseClient';
@@ -15,6 +15,7 @@ interface HistorySidebarProps {
   onSync: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onOpenWeeklyReport: () => void;
   isLoading?: boolean;
   isSyncing?: boolean;
 }
@@ -30,6 +31,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
   onSync,
   isOpen,
   setIsOpen,
+  onOpenWeeklyReport,
   isLoading = false,
   isSyncing = false
 }) => {
@@ -282,7 +284,31 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 
           <div className="flex-1 overflow-y-auto bg-slate-50/50 dark:bg-black/20">
             {view === 'list' ? (
-              <div className="p-4 space-y-3">
+              <div className="p-4 space-y-4">
+                {/* Weekly Report Action */}
+                <div 
+                  className="p-5 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl shadow-xl shadow-indigo-500/20 text-white relative overflow-hidden group cursor-pointer active:scale-[0.98] transition-all"
+                  onClick={onOpenWeeklyReport}
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-white/20 transition-all duration-500"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2 bg-white/20 backdrop-blur-md rounded-xl">
+                        <SparklesIcon className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Weekend Edition</span>
+                    </div>
+                    <h3 className="text-base font-black uppercase tracking-tight mb-1">Weekly Logbook</h3>
+                    <p className="text-xs font-bold opacity-70">Synthesize last 5 days into report</p>
+                    
+                    <div className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest bg-white/20 w-fit px-3 py-1.5 rounded-lg backdrop-blur-md">
+                      Generate Now
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
                 {isLoading ? (
                   <>
                     <HistoryItemSkeleton />
@@ -342,6 +368,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                     </div>
                   ))
                 )}
+                </div>
               </div>
             ) : view === 'detail' && selectedEntry ? (
               <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-4">
