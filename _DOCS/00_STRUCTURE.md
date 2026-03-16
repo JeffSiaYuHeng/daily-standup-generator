@@ -25,6 +25,7 @@ daily-standup-generator/
 │   └── LOGS/
 │       ├── 2026-02-06.md
 │       ├── 2026-02-07.md
+│       ├── 2026-02-25.md
 │       ├── LOG(format).md
 │   └── 00_STRUCTURE.md
 │   └── 01_DB_SCHEMA.md
@@ -36,6 +37,7 @@ daily-standup-generator/
 │   └── 06_DEPENDENCY_GRAPH.md
 │   └── PROJECT_SNAPSHOT.md
 ├── _TASK/
+│   └── _FIX_INSTRUCTION.md
 │   └── _INSTRUCTION.md
 │   └── _INSTRUCTION(Sample).md
 │   └── _PLAN.md

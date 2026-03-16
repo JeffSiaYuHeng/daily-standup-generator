@@ -6,7 +6,8 @@
 - **Core Generation**: Fully functional "Roll Over" and "AI Generation" logic.
 - **Jira Integration**: Local ticket management and selection for context.
 - **Sync Logic**: Bi-directional sync between `localStorage` and Supabase is stable.
-- **UI/UX**: Completed glassmorphism redesign with full Dark Mode support.
+- **UI/UX**: Completed glassmorphism redesign with full Dark Mode support. Standardized date formatting to `D/M/YYYY dddd` and fixed history edit persistence.
+- **Build Infrastructure**: Fixed Vite build issues caused by inline style proxying by extracting to `index.css`.
 - **PWA**: Setup manifest and service workers for mobile installation.
 
 ## 🛠️ Current Status

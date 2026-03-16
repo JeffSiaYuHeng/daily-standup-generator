@@ -143,32 +143,57 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
     setIsEditingEntry(!isEditingEntry);
   };
 
-  const handleUpdateEntry = (e: React.FormEvent) => {
+  const handleUpdateEntry = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedEntry || !editRaw || !editOutput || !editDate) return;
 
-    const dateObj = new Date(editDate + 'T12:00:00');
-    const updatedEntry: StandupEntry = {
-      ...selectedEntry,
-      date: dateObj.toISOString(),
-      rawInput: editRaw,
-      generatedOutput: editOutput
-    };
+    try {
+      // Robust date parsing
+      let dateObj: Date;
+      if (editDate.includes('T')) {
+        dateObj = new Date(editDate);
+      } else {
+        // Handle YYYY-MM-DD from HTML5 input
+        dateObj = new Date(editDate + 'T12:00:00');
+      }
 
-    onUpdate(updatedEntry);
-    setIsEditingEntry(false);
-    handleBack();
+      // Final safety check
+      if (isNaN(dateObj.getTime())) {
+        dateObj = new Date(selectedEntry.date) || new Date();
+      }
+
+      const updatedEntry: StandupEntry = {
+        ...selectedEntry,
+        date: dateObj.toISOString(),
+        rawInput: editRaw,
+        generatedOutput: editOutput
+      };
+
+      await (onUpdate(updatedEntry) as any);
+      setIsEditingEntry(false);
+      handleBack();
+    } catch (err) {
+      console.error("Update failed in Sidebar:", err);
+      // Even if internal logic fails, still try to proceed or just let the error throw
+      onUpdate({
+        ...selectedEntry,
+        date: selectedEntry.date,
+        rawInput: editRaw,
+        generatedOutput: editOutput
+      });
+      handleBack();
+    }
   };
 
   return (
     <>
       <div
-        className={`fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsOpen(false)}
       />
 
       <div className={`
-        fixed inset-y-0 right-0 z-40 w-full sm:w-[420px] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 transform transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) shadow-2xl
+        fixed inset-y-0 right-0 z-50 w-full sm:w-[420px] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 transform transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) shadow-2xl
         ${isOpen ? 'translate-x-0' : 'translate-x-full'}
       `}>
         <div className="h-full flex flex-col">

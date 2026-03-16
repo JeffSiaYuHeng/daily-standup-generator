@@ -306,7 +306,7 @@ function App() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-violet-500/5 dark:bg-violet-500/10 blur-[100px] rounded-full animate-pulse delay-700" />
       </div>
 
-      <header className="flex-none z-30 transition-all duration-300 backdrop-blur-xl bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/50 dark:border-slate-800/50">
+      <header className="flex-none z-20 transition-all duration-300 backdrop-blur-xl bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/50 dark:border-slate-800/50">
         <div className="max-w-[1920px] mx-auto px-3 sm:px-8 py-2 sm:py-3 flex flex-col gap-2">
           {/* Top Row: Logo and Right Actions */}
           <div className="flex items-center justify-between gap-2 h-10 sm:h-auto">

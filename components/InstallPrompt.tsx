@@ -60,7 +60,7 @@ export const InstallPrompt: React.FC = () => {
   if (isInstalled || !showPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 animate-slideUp">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-30 animate-slideUp">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4">
         <div className="flex items-start gap-3">
           <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl shrink-0">

@@ -110,7 +110,7 @@ This file should be a high-density summary for the Planner to quickly re-orient.
 
 ## ⏭ Next Steps after Archiving
 
-1. Clear _TASK/_INSTRUCTION.md (prepare for a fresh start).
-2. Announce: "System memory has been compacted. _PLAN.md is now clean."
+1. Empty the contents of `_TASK/_INSTRUCTION.md` and `_TASK/_FIX_INSTRUCTION.md` (keep the files, but clear the text to prepare for a fresh start).
+2. Announce: "System memory has been compacted. _PLAN.md and task instructions are now clean."
 
 ### End of Skill Definition
